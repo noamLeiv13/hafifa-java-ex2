@@ -4,16 +4,11 @@ import Equipment.Equipment;
 import Staff.Teammate;
 
 import java.util.Map;
-import java.util.stream.Collectors;
 
-public class ConsolePrinter implements EquipmentPrinter {
-    private Map<String, Long> getSummarizedEquipment(Teammate teammate) {
-        return teammate.getEquipment().stream().collect(Collectors.groupingBy(e -> e.getUniqueName(),
-                Collectors.counting()));
-    }
+public class ConsolePrinter extends BasePrinter {
 
     @Override
-    public void summarizedDisplay(Teammate teammate) {
+    public void printSummarizedDisplay(Teammate teammate) {
         Map<String, Long> summarizedEquipment = getSummarizedEquipment(teammate);
         for (Map.Entry<String, Long> entry : summarizedEquipment.entrySet()) {
             System.out.println(entry.getValue() + " x " + entry.getKey());
@@ -21,7 +16,7 @@ public class ConsolePrinter implements EquipmentPrinter {
     }
 
     @Override
-    public void DetailedDisplay(Teammate teammate) {
+    public void printDetailedDisplay(Teammate teammate) {
         for (Equipment item : teammate.getEquipment()) {
             System.out.println(item);
         }

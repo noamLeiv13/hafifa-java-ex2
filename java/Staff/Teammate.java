@@ -9,11 +9,10 @@ public class Teammate {
     private ArrayList<Equipment> equipment;
     private int id;
 
-    public Teammate(int id) {
-        this.id = id;
+    public Teammate() {
+        this.id = this.hashCode();
         equipment = new ArrayList<Equipment>();
     }
-
 
     public void addItem(Equipment newEquipment) {
         equipment.add(newEquipment);
@@ -44,10 +43,6 @@ public class Teammate {
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
 

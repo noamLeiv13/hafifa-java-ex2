@@ -1,5 +1,6 @@
 package Staff;
 
+import CustomExceptions.SwitchEquipmentException;
 import Equipment.Equipment;
 
 import java.util.ArrayList;
@@ -9,13 +10,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class TeamLeader extends Teammate {
-    ArrayList<Teammate> teammates;
+    private ArrayList<Teammate> teammates;
 
-    public TeamLeader(int id, ArrayList<Teammate> teammates) {
-        super(id);
+    public TeamLeader(ArrayList<Teammate> teammates) {
         this.teammates = teammates;
     }
-
 
     public List<Equipment> getTeamEquipment() {
         List<Equipment> teammatesEquipment = teammates.stream().map(Teammate::getEquipment).flatMap(Collection::stream)
@@ -35,17 +34,25 @@ public class TeamLeader extends Teammate {
         return null;
     }
 
-    public boolean switchEquipment(int passerId, int equipmentId, int getterId) {
+    public void switchEquipment(int passerId, int equipmentId, int getterId) throws SwitchEquipmentException {
         Teammate passer = getTeammateById(passerId);
         Teammate getter = getTeammateById(getterId);
-        if (passer != null && getter != null) {
+        if (isInputUsersAreValid(passer, getter)) {
             Equipment toSend = passer.removeItemById(equipmentId);
-            if (toSend != null) {
+            if (equipmentIsValid(toSend)) {
                 getter.addItem(toSend);
-                return true;
-            }
-        }
-        return false;
+            } else
+                throw new SwitchEquipmentException();
+        } else
+            throw new SwitchEquipmentException();
+    }
+
+    private boolean equipmentIsValid(Equipment equipment) {
+        return equipment != null;
+    }
+
+    private boolean isInputUsersAreValid(Teammate passer, Teammate getter) {
+        return passer != null && getter != null;
     }
 
     public ArrayList<Teammate> getTeammates() {
